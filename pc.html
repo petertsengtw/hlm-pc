@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>花蓮慈濟醫院公共傳播室</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* 頁首 */
+    .site-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .site-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e6edf3;
+      letter-spacing: 0.02em;
+    }
+
+    .site-header .en {
+      font-size: 0.95rem;
+      color: #4db6ac;
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .meet-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 18px;
+      background: #00897b;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .meet-btn:hover { background: #00796b; }
+
+    /* 區塊標題 */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4db6ac;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    section { margin-bottom: 32px; }
+
+    /* 卡片 */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    /* 人員照片 */
+    .photo-note {
+      font-size: 0.82rem;
+      color: #8b949e;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .photo-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #e6edf3;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .photo-btn:hover {
+      background: #00897b;
+      border-color: #00897b;
+    }
+
+    .photo-btn .en-label {
+      display: block;
+      font-size: 0.72rem;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    .photo-btn:hover .en-label { color: rgba(255,255,255,0.7); }
+
+    /* 雙欄佈局 */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* 維護資源連結 */
+    .resource-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #e6edf3;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .resource-link:hover {
+      border-color: #00897b;
+      background: #0d2818;
+      color: #4db6ac;
+    }
+
+    .resource-link .icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .resource-link .desc {
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    /* 公傳服務格子 */
+    .service-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .service-btn {
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #e6edf3;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .service-btn:hover {
+      border-color: #00897b;
+      background: #0d2818;
+      color: #4db6ac;
+    }
+
+    .service-btn .label { font-weight: 600; }
+
+    .service-btn .sub {
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .service-btn:hover .sub { color: rgba(77,182,172,0.7); }
+
+    /* 公版素材 */
+    .asset-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .asset-desc {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .asset-btn {
+      padding: 8px 20px;
+      background: #00897b;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .asset-btn:hover { background: #00796b; }
+
+    /* 院內網路提示橫幅 */
+    .intranet-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #2d1a00;
+      border: 1px solid #fb8c00;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+      color: #ffb74d;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .intranet-notice .notice-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* 密碼 Modal */
+    .pwd-modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .pwd-modal-overlay.open { display: flex; }
+    .pwd-modal {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 28px 32px;
+      min-width: 280px;
+      text-align: center;
+      position: relative;
+    }
+    .pwd-modal h3 { font-size: 0.8rem; color: #4db6ac; margin-bottom: 16px; letter-spacing: 0.1em; }
+    .pwd-value { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.12em; color: #e6edf3; margin: 8px 0 20px; }
+    .pwd-error { font-size: 0.95rem; color: #ff7043; margin: 8px 0 20px; }
+    .pwd-close {
+      padding: 6px 20px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .pwd-close:hover { background: #30363d; }
+
+    /* 頁尾 */
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.78rem;
+      color: #484f58;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 頁首 -->
+  <header class="site-header">
+    <h1>花蓮慈濟醫院公共傳播室</h1>
+    <p class="en">Hualien Tzu Chi Hospital · Public Communications</p>
+    <a class="meet-btn" href="web-admin.html" target="_blank">
+      🔐 登入慈院官網管理後台
+    </a>
+  </header>
+
+  <!-- 院內網路提示 -->
+  <div class="intranet-notice">
+    <span class="notice-icon">⚠️</span>
+    <span>本頁連結（照片下載、素材取得）需於<strong style="color:#ffcc80;">院內網路環境</strong>下才能正常使用</span>
+  </div>
+
+  <!-- 人員照片下載 -->
+  <section>
+    <div class="card">
+      <p class="section-title">人員照片下載</p>
+      <p class="photo-note">
+        請選擇要下載的類型，點選後輸入密碼（請洽公傳室索取）即可連線 NAS 伺服器，自行挑選並下載照片。
+      </p>
+      <div class="photo-grid">
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=598c481ed8664ed3a0013f41424fe013" target="_blank">
+          醫師
+          <span class="en-label">Doctor</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=a5239599f4dd4a8a88610399640cd22f" target="_blank">
+          護理
+          <span class="en-label">Nurse</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=9ded902239244a14ae611cc08eda41d3" target="_blank">
+          醫技
+          <span class="en-label">Medical Technicians</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=e6f8e52d20b94d48b720a03e4e367fe3" target="_blank">
+          行政
+          <span class="en-label">Administrative</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=6f2ab42d9cf6461fae7d3e4499ddf5a2" target="_blank">
+          單位團隊
+          <span class="en-label">Team Member</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=ae0085146e6346ada213da8334e3e13e" target="_blank">
+          優良資深同仁
+          <span class="en-label">Senior</span>
+        </a>
+        <a class="photo-btn" href="https://10.2.28.149/share.cgi?ssid=83263e86367a4e08bf2fd6cdcb494440" target="_blank">
+          退休同仁
+          <span class="en-label">Retired</span>
+        </a>
+      </div>
+      <div style="margin-top:14px; text-align:right;">
+        <button class="photo-btn" onclick="showPassword()" style="cursor:pointer;">
+          🔑 查看密碼
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 院內公傳資源 -->
+  <section>
+    <p class="section-title">院內公傳資源取得（Lotus Notes）</p>
+    <div class="service-grid">
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask5.nsf">
+        <span class="label">網站製作</span>
+        <span class="sub">科網、特色中心、專網製作</span>
+      </a>
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask1.nsf">
+        <span class="label">美術設計</span>
+        <span class="sub">海報美編、形象設計</span>
+      </a>
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask2.nsf">
+        <span class="label">攝影紀錄</span>
+        <span class="sub">活動攝影、團隊及個人攝影</span>
+      </a>
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask3.nsf">
+        <span class="label">錄影紀錄</span>
+        <span class="sub">活動錄影與剪輯後製</span>
+      </a>
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask4.nsf">
+        <span class="label">跑馬燈</span>
+        <span class="sub">院內跑馬燈內容上架及管理</span>
+      </a>
+      <a class="service-btn" href="notes://mdaapa/OAUse/PCtask6.nsf">
+        <span class="label">成果發佈</span>
+        <span class="sub">醫療研究成果發佈</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 公版素材 -->
+  <section>
+    <div class="card">
+      <div class="asset-row">
+        <div>
+          <p class="section-title" style="margin-bottom:4px;">公版素材下載</p>
+          <p class="asset-desc">醫院外觀、PPT 簡報底圖等公版素材（需院內網路連線）</p>
+        </div>
+        <a class="asset-btn" href="https://10.2.28.149/share.cgi?ssid=5abf7a2742bf49fb91f566907453b557" target="_blank">
+          取得素材 →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    公共傳播室
+  </footer>
+
+</div>
+
+<!-- 密碼 Modal -->
+<div class="pwd-modal-overlay" id="pwdModal">
+  <div class="pwd-modal">
+    <h3>人員照片下載密碼</h3>
+    <div id="pwdContent"><p style="color:#8b949e;font-size:0.9rem;">驗證中…</p></div>
+    <button class="pwd-close" onclick="closePassword()">關閉</button>
+  </div>
+</div>
+
+<script>
+  async function showPassword() {
+    const modal = document.getElementById('pwdModal');
+    const content = document.getElementById('pwdContent');
+    modal.classList.add('open');
+    content.innerHTML = '<p style="color:#8b949e;font-size:0.9rem;">驗證中…</p>';
+
+    const onIntranet = await checkIntranet();
+    if (onIntranet) {
+      content.innerHTML = '<div class="pwd-value">tzuchi038561825</div>';
+    } else {
+      content.innerHTML = '<div class="pwd-error">非院內網路不提供密碼</div>';
+    }
+  }
+
+  function closePassword() {
+    document.getElementById('pwdModal').classList.remove('open');
+  }
+
+  async function checkIntranet() {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 2000);
+      await fetch('https://10.2.28.149/', { mode: 'no-cors', signal: controller.signal });
+      clearTimeout(timer);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // 點遮罩關閉
+  document.getElementById('pwdModal').addEventListener('click', function(e) {
+    if (e.target === this) closePassword();
+  });
+</script>
+
+</body>
+</html>

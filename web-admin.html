@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>慈院各科網站後台入口</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* 頁首 */
+    .site-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .site-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e6edf3;
+    }
+
+    .site-header .sub {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-top: 6px;
+    }
+
+    /* 院內網路提示橫幅 */
+    .intranet-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #2d1a00;
+      border: 1px solid #fb8c00;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+      color: #ffb74d;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .intranet-notice .notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+
+    /* 主後台按鈕 */
+    .main-admin {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .main-admin-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: #00897b;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      transition: background 0.2s;
+    }
+
+    .main-admin-btn:hover { background: #00796b; }
+
+    /* 分類 Tab */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 0;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #8b949e;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover { color: #e6edf3; }
+
+    .tab-btn.active {
+      color: #4db6ac;
+      border-bottom-color: #00897b;
+    }
+
+    /* Tab 內容 */
+    .tab-panel { display: none; padding-top: 20px; }
+    .tab-panel.active { display: block; }
+
+    /* 科別連結格子 */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .dept-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 14px 10px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: #e6edf3;
+      line-height: 1.4;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      min-height: 56px;
+    }
+
+    .dept-link:hover {
+      background: #0d2818;
+      border-color: #00897b;
+      color: #4db6ac;
+    }
+
+    /* 頁尾 */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: #484f58;
+    }
+
+    footer a { color: #4db6ac; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 頁首 -->
+  <header class="site-header">
+    <h1>慈院各科網站後台入口</h1>
+    <p class="sub">花蓮慈濟醫院公共傳播室 · 請選擇要編輯的網站管理後台</p>
+  </header>
+
+  <!-- 院內網路提示 -->
+  <div class="intranet-notice">
+    <span class="notice-icon">⚠️</span>
+    <span>本頁連結需於<strong style="color:#ffcc80;">院內網路環境</strong>下才能正常使用</span>
+  </div>
+
+  <!-- 主後台 -->
+  <div class="main-admin">
+    <a class="main-admin-btn" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">
+      🔐 花蓮慈院官網管理後台
+    </a>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="internal">內科系</button>
+    <button class="tab-btn" data-tab="surgery">外科系</button>
+    <button class="tab-btn" data-tab="other">其他專科</button>
+    <button class="tab-btn" data-tab="center">特色中心</button>
+    <button class="tab-btn" data-tab="research">教學研究</button>
+    <button class="tab-btn" data-tab="allied">醫事團隊</button>
+  </div>
+
+  <!-- 內科系 -->
+  <div class="tab-panel active" id="tab-internal">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">一般醫學內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">心臟內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">老年醫學科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">血液腫瘤科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">身心醫學科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">肝膽腸胃科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/pc/ronc" target="_blank">放射腫瘤部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">重症加護內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">風濕免疫科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/pc/fam" target="_blank">家庭醫學科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">胸腔內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經生理檢查室</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">腎臟內科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">感染科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">新陳代謝內分泌科</a>
+    </div>
+  </div>
+
+  <!-- 外科系 -->
+  <div class="tab-panel" id="tab-surgery">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">一般外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">大腸直腸外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">心臟血管外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">皮膚科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">耳鼻喉科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">泌尿科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">兒童外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">重症加護外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">骨科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">胸腔外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經腫瘤科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經脊髓微創外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">神經血管介入治療科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">功能神經外科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">麻醉部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">整形暨重建外科</a>
+    </div>
+  </div>
+
+  <!-- 其他專科 -->
+  <div class="tab-panel" id="tab-other">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">小兒科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">牙科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">中醫科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">急診部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">整合醫學科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">核子醫學科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">高齡整合照護科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">眼科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">婦產科</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">復健部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">解剖病理部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/rad/administrator/" target="_blank">影像醫學部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/home/administrator/" target="_blank">職業醫學科</a>
+    </div>
+  </div>
+
+  <!-- 特色中心 -->
+  <div class="tab-panel" id="tab-center">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/cancer/administrator/" target="_blank">癌症醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/tcopo/administrator/" target="_blank">器官移植暨捐贈中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/nsurg/administrator/" target="_blank">神經醫學科學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/nsurg/administrator/" target="_blank">記憶暨老人健康中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/rhc/administrator/" target="_blank">生殖醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/htbc/administrator/" target="_blank">乳房醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/tbc/administrator/" target="_blank">細胞治療中心</a>
+      <a class="dept-link" href="https://btcscc.tzuchi.com.tw/administrator/" target="_blank">骨髓幹細胞中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/imc/administrator/" target="_blank">國際醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/pain/administrator/" target="_blank">疼痛中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/endo/administrator/" target="_blank">糖尿病保健推廣中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/iob/administrator/" target="_blank">骨鬆照護中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/obsgyn/administrator/" target="_blank">婦女健康中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/migs/administrator/" target="_blank">婦科微創手術中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/prc/administrator/" target="_blank">兒童發展復健中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/ltcc/administrator/" target="_blank">失智共同照護中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/ltcc/administrator/" target="_blank">社區健康中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/eld/administrator/" target="_blank">輕安居</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/gast/administrator/" target="_blank">肝病諮詢中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/hcare/administrator/" target="_blank">預防醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/sports/administrator/" target="_blank">運動醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/laser/administrator/" target="_blank">雷射(美容)醫學中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/ier/administrator/" target="_blank">眼科研究中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/gcs/administrator/" target="_blank">遺傳諮詢中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/cqm/administrator/" target="_blank">品質管理中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/bic/administrator/" target="_blank">創新研發中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/spcenter/administrator/" target="_blank">標準化病人中心</a>
+    </div>
+  </div>
+
+  <!-- 教學研究 -->
+  <div class="tab-panel" id="tab-research">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/tch/administrator/" target="_blank">教學部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/mr/administrator/" target="_blank">研究部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/rec/administrator/" target="_blank">研究倫理委員會</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/hrpc/administrator/" target="_blank">受試者保護中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/csc/administrator/" target="_blank">臨床技能中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/pc/index.php/clinical-trial-center" target="_blank">臨床試驗中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/cfd/administrator/" target="_blank">師資培育中心</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/cmrd/administrator/" target="_blank">心血管粒線體中心</a>
+      <a class="dept-link" href="https://sites.google.com/view/hltzuchilib" target="_blank">圖書館</a>
+    </div>
+  </div>
+
+  <!-- 醫事團隊 -->
+  <div class="tab-panel" id="tab-allied">
+    <div class="dept-grid">
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/nurse/administrator/" target="_blank">護理部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/drug/administrator/" target="_blank">藥學部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/md/administrator/" target="_blank">醫務部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/mt/administrator/" target="_blank">檢驗醫學部</a>
+      <a class="dept-link" href="https://hlm.tzuchi.com.tw/dietitians/administrator/" target="_blank">營養科</a>
+      <a class="dept-link" href="https://hlmedit.tzuchi.com.tw/hualien/social/administrator/" target="_blank">社會服務室</a>
+      <a class="dept-link" href="https://hlmedit.tzuchi.com.tw/hualien/ltcc/administrator/" target="_blank">長期照護部</a>
+      <a class="dept-link" href="https://hlmedit.tzuchi.com.tw/hualien/DACH/administrator/" target="_blank">高齡暨社區醫學部</a>
+      <a class="dept-link" href="http://hospice.tzuchi.com.tw/Tzuchi/Training/ShowCatSubjects?CategoryId=0" target="_blank">心蓮病房</a>
+    </div>
+  </div>
+
+  <footer>
+    <a href="pc.html">← 返回公傳室入口</a>
+    &nbsp;·&nbsp;
+    花蓮慈濟醫院公共傳播室
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
