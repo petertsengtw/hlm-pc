@@ -388,6 +388,33 @@ nav{
     color:#b5893a;
 }
 
+/* 跨欄強調卡 */
+.work-card.wide{
+    grid-column:1 / -1;
+}
+
+.work-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.work-tag{
+    font-size:11px;
+    letter-spacing:2px;
+    padding:3px 9px;
+    border:1px solid rgba(181,137,58,0.45);
+    color:rgba(150,90,15,0.9);
+    background:rgba(181,137,58,0.07);
+    border-radius:2px;
+}
+
+.work-desc strong{
+    font-weight:500;
+    color:rgba(44,31,16,0.8);
+}
+
 @media(max-width:768px){
     .works-grid{
         grid-template-columns:1fr;
@@ -1107,6 +1134,26 @@ footer{
                     突破距離限制感受現場氛圍。
                 </div>
                 <div class="work-cta">進入導覽 →</div>
+            </a>
+
+            <a class="work-card wide" href="https://hlm.tzuchi.com.tw/store/" target="_blank" rel="noopener">
+                <div class="work-num">05</div>
+                <div class="work-type">院內數位服務</div>
+                <div class="work-title">員工特約廠商</div>
+                <div class="work-tags">
+                    <span class="work-tag">LINE@ 身分綁定</span>
+                    <span class="work-tag">Lotus Notes COM 自動同步</span>
+                </div>
+                <div class="work-desc">
+                    特約商店與職工福利公告的手機查詢服務。同仁加入
+                    <strong>LINE@ 官方帳號</strong>後，由圖文選單進入 LIFF 查詢頁，
+                    輸入姓名、Notes ID 與院內公佈欄張貼的期效性驗證碼完成綁定，
+                    確保資料只有本院同仁查得到；季度並以在職名單覆核，撤銷離職同仁權限。<br><br>
+                    店家與公告清單則透過 <strong>Lotus Notes COM API</strong>
+                    自動從 ContributingStore.nsf、mdabulletin.nsf 匯出同步，
+                    過期與作廢資料自動排除，免去人工整理，手機隨時查得到最新優惠。
+                </div>
+                <div class="work-cta">前往查詢頁 →</div>
             </a>
 
         </div>
