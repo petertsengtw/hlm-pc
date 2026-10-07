@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>媒體露出監測工具</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      color: #e6edf3;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 24px;
+    }
+
+    /* 搜尋列 */
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    #keyword-input {
+      flex: 1;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 1rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #keyword-input:focus {
+      border-color: #00897b;
+    }
+
+    #keyword-input::placeholder {
+      color: #6e7681;
+    }
+
+    #search-btn {
+      background: #00897b;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    #search-btn:hover { background: #00796b; }
+    #search-btn:disabled { background: #444; cursor: not-allowed; }
+
+    /* 媒體選擇區 */
+    .panel {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .select-all-btn {
+      background: transparent;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #8b949e;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .select-all-btn:hover {
+      background: #21262d;
+      color: #e6edf3;
+    }
+
+    .media-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .media-checkbox {
+      display: none;
+    }
+
+    .media-label {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #8b949e;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 5px 12px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .media-checkbox:checked + .media-label {
+      background: #0d2818;
+      border-color: #00897b;
+      color: #4db6ac;
+    }
+
+    .media-label:hover {
+      background: #30363d;
+    }
+
+    .custom-media-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-top: 1px solid #30363d;
+      padding-top: 12px;
+    }
+
+    .custom-media-row label {
+      font-size: 0.82rem;
+      color: #6e7681;
+      white-space: nowrap;
+    }
+
+    #custom-domain-input {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #e6edf3;
+      font-size: 0.85rem;
+      padding: 5px 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #custom-domain-input:focus { border-color: #00897b; }
+    #custom-domain-input::placeholder { color: #6e7681; }
+
+    #add-custom-btn {
+      background: transparent;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #8b949e;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 5px 14px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    #add-custom-btn:hover {
+      background: #21262d;
+      border-color: #00897b;
+      color: #4db6ac;
+    }
+
+    /* 進度列 */
+    #progress-area {
+      display: none;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .progress-bar-wrap {
+      background: #21262d;
+      border-radius: 4px;
+      height: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      background: #00897b;
+      height: 100%;
+      transition: width 0.3s;
+      width: 0%;
+    }
+
+    /* 結果區 */
+    #results-area { display: none; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .results-count {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .results-count strong {
+      color: #4db6ac;
+    }
+
+    .result-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .result-card:hover {
+      border-color: #444d56;
+    }
+
+    .result-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .media-badge {
+      border-radius: 3px;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 7px;
+    }
+
+    .result-date {
+      font-size: 0.78rem;
+      color: #6e7681;
+    }
+
+    .result-title {
+      color: #e6edf3;
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .result-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .result-title a:hover {
+      color: #4db6ac;
+    }
+
+    .result-desc {
+      color: #8b949e;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .result-link {
+      color: #4db6ac;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .result-link:hover {
+      text-decoration: underline;
+    }
+
+    mark {
+      background: #0d2818;
+      border-radius: 2px;
+      color: #4db6ac;
+      padding: 0 2px;
+    }
+
+    /* 空狀態 / 錯誤 */
+    .tip-box {
+      background: #0d2818;
+      border-left: 4px solid #00897b;
+      border-radius: 4px;
+      color: #4db6ac;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .warn-box {
+      background: #2d1a00;
+      border-left: 4px solid #fb8c00;
+      border-radius: 4px;
+      color: #ffb74d;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    #empty-state {
+      display: none;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #6e7681;
+      font-size: 0.9rem;
+      padding: 32px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .search-row { flex-direction: column; }
+      #search-btn { width: 100%; }
+      .custom-media-row { flex-wrap: wrap; }
+      .custom-media-row label { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>媒體露出監測</h1>
+    <p class="subtitle">輸入關鍵字，確認各媒體是否有相關報導（依標題與內文摘要判斷）</p>
+
+    <div class="search-row">
+      <input type="text" id="keyword-input" placeholder="輸入關鍵字，例如：花蓮慈濟醫院">
+      <button id="search-btn">搜尋</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">選擇媒體來源</span>
+        <button class="select-all-btn" id="toggle-all-btn">全選</button>
+      </div>
+      <div class="media-grid" id="media-grid"></div>
+      <div class="custom-media-row">
+        <label>自訂媒體網域</label>
+        <input type="text" id="custom-domain-input" placeholder="例如：example.com.tw">
+        <button id="add-custom-btn">＋ 新增</button>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      資料來源為 Google News RSS，結果反映 Google News 收錄情形，不代表完整媒體露出。每次搜尋最多顯示各媒體近 20 則相關報導。
+    </div>
+
+    <div id="progress-area">
+      <span id="progress-text">正在搜尋...</span>
+      <div class="progress-bar-wrap">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+
+    <div id="results-area">
+      <div class="results-header">
+        <span class="results-count">共找到 <strong id="results-count-num">0</strong> 則相關報導</span>
+      </div>
+      <div id="results-list"></div>
+    </div>
+
+    <div id="empty-state">查無相關報導。請嘗試調整關鍵字或選擇不同的媒體來源。</div>
+  </div>
+
+  <script>
+    const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
+    const PRESET_MEDIA = [
+      { name: '聯合新聞網', domain: 'udn.com' },
+      { name: '中時新聞網', domain: 'chinatimes.com' },
+      { name: '自由時報', domain: 'ltn.com.tw' },
+      { name: 'ETtoday', domain: 'ettoday.net' },
+      { name: 'TVBS', domain: 'news.tvbs.com.tw' },
+      { name: '三立新聞', domain: 'setn.com' },
+      { name: '民視新聞', domain: 'ftvnews.com.tw' },
+      { name: '公共電視', domain: 'news.pts.org.tw' },
+      { name: '鏡週刊', domain: 'mirrormedia.mg' },
+      { name: '健康醫療網', domain: 'healthnews.com.tw' },
+      { name: '東森新聞', domain: 'etoday.com.tw' },
+    ];
+
+    const BADGE_COLORS = [
+      '#00796b', '#1565c0', '#6a1b9a', '#ad1457',
+      '#e65100', '#558b2f', '#0277bd', '#4527a0',
+    ];
+
+    function getBadgeColor(name) {
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return BADGE_COLORS[Math.abs(hash) % BADGE_COLORS.length];
+    }
+
+    function loadCustomMedia() {
+      try { return JSON.parse(localStorage.getItem('nm_custom_media') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveCustomMedia(list) {
+      localStorage.setItem('nm_custom_media', JSON.stringify(list));
+    }
+
+    function renderMediaGrid() {
+      const grid = document.getElementById('media-grid');
+      const customs = loadCustomMedia();
+      const allMedia = [...PRESET_MEDIA, ...customs];
+      grid.innerHTML = '';
+
+      allMedia.forEach(({ name, domain }, i) => {
+        const id = `media-${i}`;
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'media-checkbox';
+        cb.id = id;
+        cb.dataset.name = name;
+        cb.dataset.domain = domain;
+        cb.checked = true;
+
+        const lbl = document.createElement('label');
+        lbl.className = 'media-label';
+        lbl.htmlFor = id;
+        lbl.textContent = name;
+
+        if (i >= PRESET_MEDIA.length) {
+          const del = document.createElement('span');
+          del.textContent = ' ×';
+          del.style.cssText = 'cursor:pointer;opacity:0.6;margin-left:2px;';
+          del.addEventListener('click', (e) => {
+            e.preventDefault();
+            const updated = loadCustomMedia().filter(m => m.domain !== domain);
+            saveCustomMedia(updated);
+            renderMediaGrid();
+          });
+          lbl.appendChild(del);
+        }
+
+        grid.appendChild(cb);
+        grid.appendChild(lbl);
+      });
+    }
+
+    document.getElementById('toggle-all-btn').addEventListener('click', () => {
+      const checkboxes = document.querySelectorAll('.media-checkbox');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      checkboxes.forEach(cb => { cb.checked = !allChecked; });
+      document.getElementById('toggle-all-btn').textContent = allChecked ? '全選' : '全不選';
+    });
+
+    document.getElementById('add-custom-btn').addEventListener('click', () => {
+      const input = document.getElementById('custom-domain-input');
+      const raw = input.value.trim().toLowerCase()
+        .replace(/^https?:\/\//i, '').replace(/\/.*$/, '');
+      if (!raw || !raw.includes('.')) {
+        input.focus();
+        return;
+      }
+      const customs = loadCustomMedia();
+      const allMedia = [...PRESET_MEDIA, ...customs];
+      if (allMedia.some(m => m.domain === raw)) {
+        input.value = '';
+        return;
+      }
+      customs.push({ name: raw, domain: raw });
+      saveCustomMedia(customs);
+      input.value = '';
+      renderMediaGrid();
+    });
+
+    document.getElementById('custom-domain-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('add-custom-btn').click();
+    });
+
+    function getSelectedMedia() {
+      return Array.from(document.querySelectorAll('.media-checkbox:checked'))
+        .map(cb => ({ name: cb.dataset.name, domain: cb.dataset.domain }));
+    }
+
+    function parseRSS(xmlText) {
+      const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+      return Array.from(xml.querySelectorAll('item')).map(item => {
+        const rawDesc = item.querySelector('description')?.textContent || '';
+        const descText = rawDesc.replace(/<[^>]+>/g, '').trim();
+        return {
+          title: item.querySelector('title')?.textContent?.trim() || '',
+          description: descText,
+          link: item.querySelector('link')?.nextSibling?.nodeValue?.trim()
+                || item.querySelector('link')?.textContent?.trim() || '#',
+          pubDate: item.querySelector('pubDate')?.textContent?.trim() || '',
+        };
+      });
+    }
+
+    function highlight(text, keyword) {
+      if (!keyword || !text) return escapeHtml(text);
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return escapeHtml(text).replace(new RegExp(escaped, 'gi'),
+        m => `<mark>${m}</mark>`);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      return d.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    }
+
+    function renderResults(results, keyword) {
+      const list = document.getElementById('results-list');
+      list.innerHTML = '';
+      results.forEach(({ mediaName, title, description, link, pubDate }) => {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="result-meta">
+            <span class="media-badge" style="background:${getBadgeColor(mediaName)}">${escapeHtml(mediaName)}</span>
+            <span class="result-date">${formatDate(pubDate)}</span>
+          </div>
+          <div class="result-title"><a href="${escapeHtml(link)}" target="_blank" rel="noopener">${highlight(title, keyword)}</a></div>
+          ${description ? `<div class="result-desc">${highlight(description.slice(0, 160), keyword)}${description.length > 160 ? '…' : ''}</div>` : ''}
+          <a class="result-link" href="${escapeHtml(link)}" target="_blank" rel="noopener">查看原文 →</a>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    async function doSearch() {
+      const keyword = document.getElementById('keyword-input').value.trim();
+      if (!keyword) {
+        document.getElementById('keyword-input').focus();
+        return;
+      }
+
+      const mediaList = getSelectedMedia();
+      if (mediaList.length === 0) return;
+
+      const searchBtn = document.getElementById('search-btn');
+      const progressArea = document.getElementById('progress-area');
+      const resultsArea = document.getElementById('results-area');
+      const emptyState = document.getElementById('empty-state');
+
+      searchBtn.disabled = true;
+      progressArea.style.display = 'block';
+      resultsArea.style.display = 'none';
+      emptyState.style.display = 'none';
+      document.getElementById('progress-bar').style.width = '0%';
+
+      let done = 0;
+      const total = mediaList.length;
+      const allResults = [];
+
+      function updateProgress() {
+        done++;
+        const pct = Math.round((done / total) * 100);
+        document.getElementById('progress-bar').style.width = pct + '%';
+        document.getElementById('progress-text').textContent =
+          `正在搜尋… （${done} / ${total} 個媒體）`;
+      }
+
+      await Promise.allSettled(
+        mediaList.map(async ({ name, domain }) => {
+          try {
+            const q = encodeURIComponent(`${keyword} site:${domain}`);
+            const rssUrl = `https://news.google.com/rss/search?q=${q}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
+            const res = await fetch(CORS_PROXY + encodeURIComponent(rssUrl), { signal: AbortSignal.timeout(12000) });
+            const text = await res.text();
+            parseRSS(text).forEach(item => {
+              allResults.push({ mediaName: name, ...item });
+            });
+          } catch (_) { /* 略過單一媒體失敗，不中斷其他請求 */ }
+          updateProgress();
+        })
+      );
+
+      allResults.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+      progressArea.style.display = 'none';
+      searchBtn.disabled = false;
+
+      if (allResults.length === 0) {
+        emptyState.style.display = 'block';
+      } else {
+        document.getElementById('results-count-num').textContent = allResults.length;
+        renderResults(allResults, keyword);
+        resultsArea.style.display = 'block';
+      }
+    }
+
+    document.getElementById('search-btn').addEventListener('click', doSearch);
+    document.getElementById('keyword-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
+
+    renderMediaGrid();
+  </script>
+</body>
+</html>
