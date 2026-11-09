@@ -374,8 +374,17 @@
       position: relative;
     }
     .pwd-modal h3 { font-size: 0.8rem; color: #4db6ac; margin-bottom: 16px; letter-spacing: 0.1em; }
-    .pwd-value { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.12em; color: #e6edf3; margin: 8px 0 20px; }
-    .pwd-error { font-size: 0.95rem; color: #ff7043; margin: 8px 0 20px; }
+    /* 密碼頁放在院內網站，以 iframe 嵌入；院外連不到就不會顯示 */
+    .pwd-frame {
+      display: block;
+      width: min(480px, calc(100vw - 96px));
+      height: 240px;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .pwd-hint { font-size: 0.78rem; color: #8b949e; margin: 12px 0 16px; line-height: 1.6; }
+    .pwd-hint a { color: #4db6ac; text-decoration: underline; }
     .pwd-close {
       padding: 6px 20px;
       background: #21262d;
@@ -574,40 +583,26 @@
 <div class="pwd-modal-overlay" id="pwdModal">
   <div class="pwd-modal">
     <h3>人員照片下載密碼</h3>
-    <div id="pwdContent"><p style="color:#8b949e;font-size:0.9rem;">驗證中…</p></div>
+    <iframe id="pwdFrame" class="pwd-frame" title="人員照片下載密碼"></iframe>
+    <p class="pwd-hint">
+      僅限院內網路查看；若上方無法顯示，請改用<a href="https://hlm.tzuchi.com.tw/md/pc-pw.html" target="_blank" rel="noopener">新分頁開啟</a>，或洽公傳室。
+    </p>
     <button class="pwd-close" onclick="closePassword()">關閉</button>
   </div>
 </div>
 
 <script>
-  async function showPassword() {
-    const modal = document.getElementById('pwdModal');
-    const content = document.getElementById('pwdContent');
-    modal.classList.add('open');
-    content.innerHTML = '<p style="color:#8b949e;font-size:0.9rem;">驗證中…</p>';
+  const PWD_URL = 'https://hlm.tzuchi.com.tw/md/pc-pw.html';
 
-    const onIntranet = await checkIntranet();
-    if (onIntranet) {
-      content.innerHTML = '<div class="pwd-value">tzuchi038561825</div>';
-    } else {
-      content.innerHTML = '<div class="pwd-error">非院內網路不提供密碼</div>';
-    }
+  // 每次開啟都重新載入，密碼更新後能立即看到
+  function showPassword() {
+    document.getElementById('pwdFrame').src = PWD_URL;
+    document.getElementById('pwdModal').classList.add('open');
   }
 
   function closePassword() {
     document.getElementById('pwdModal').classList.remove('open');
-  }
-
-  async function checkIntranet() {
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 2000);
-      await fetch('https://10.2.28.149/', { mode: 'no-cors', signal: controller.signal });
-      clearTimeout(timer);
-      return true;
-    } catch {
-      return false;
-    }
+    document.getElementById('pwdFrame').src = 'about:blank';
   }
 
   // 點遮罩關閉
