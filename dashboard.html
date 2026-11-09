@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>傳播成效儀表板 | 花蓮慈濟醫院公共傳播室</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 32px 16px 60px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    /* 頁首 */
+    .site-header {
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #21262d;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .site-header h1 { font-size: 1.35rem; font-weight: 700; }
+
+    .site-header .sub { font-size: 0.82rem; color: #8b949e; margin-top: 4px; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #8b949e;
+      white-space: nowrap;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .back-btn:hover { border-color: #4db6ac; color: #4db6ac; }
+
+    /* 區塊 */
+    .group { margin-bottom: 32px; }
+
+    .group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #4db6ac;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .group-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #21262d;
+    }
+
+    .group-label .year-tag {
+      font-size: 0.68rem;
+      padding: 1px 8px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      color: #8b949e;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: 0;
+      flex-shrink: 0;
+    }
+
+    .manual-note {
+      font-size: 0.73rem;
+      color: #484f58;
+      margin-bottom: 12px;
+    }
+
+    /* 格線 */
+    .stat-grid   { display: grid; gap: 12px; }
+    .stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .stat-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    @media (max-width: 700px) {
+      .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .stat-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 400px) {
+      .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .stat-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* 卡片 */
+    .stat-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 18px 16px;
+      transition: border-color 0.15s;
+    }
+
+    .stat-card:hover { border-color: #30363d; }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #e6edf3;
+      line-height: 1.1;
+      margin-bottom: 6px;
+      min-height: 2.1rem;
+    }
+
+    .stat-value.loading {
+      color: transparent;
+      background: #21262d;
+      border-radius: 4px;
+      width: 55%;
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.7; }
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: #8b949e;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-yt     { background: rgba(255,0,0,0.15);     color: #ff7070; }
+    .badge-fb     { background: rgba(24,119,242,0.15);  color: #6ca4f8; }
+    .badge-ig     { background: rgba(193,53,132,0.15);  color: #e870b0; }
+    .badge-manual { background: rgba(77,182,172,0.1);   color: #4db6ac; }
+    .badge-media  { background: rgba(234,179,8,0.12);   color: #fbbf24; }
+
+    /* Looker Studio */
+    .looker-wrap {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .looker-wrap iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      display: block;
+    }
+
+    .looker-placeholder {
+      padding: 48px 24px;
+      text-align: center;
+      color: #8b949e;
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+
+    .looker-placeholder strong {
+      display: block;
+      color: #4db6ac;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .looker-placeholder a { color: #4db6ac; text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header class="site-header">
+    <div>
+      <h1>傳播成效儀表板</h1>
+      <p class="sub">花蓮慈濟醫院 · 公共傳播室</p>
+    </div>
+    <a class="back-btn" href="pc.html">← 返回公傳服務總覽</a>
+  </header>
+
+  <!-- 頻道與社群 -->
+  <div class="group">
+    <div class="group-label">頻道與社群</div>
+    <div class="stat-grid stat-grid-3">
+
+      <div class="stat-card">
+        <div class="stat-value loading" id="yt-subs">—</div>
+        <div class="stat-label">訂閱人數</div>
+        <span class="stat-badge badge-yt">YouTube</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value loading" id="fb-fans">—</div>
+        <div class="stat-label">FB 粉絲數</div>
+        <span class="stat-badge badge-fb">Facebook</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">253</div><!-- ← 更新此數字 -->
+        <div class="stat-label">IG 追蹤數</div>
+        <span class="stat-badge badge-ig">Instagram</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 年度業務量 -->
+  <div class="group">
+    <div class="group-label">
+      年度業務量
+      <span class="year-tag" id="year-tag">2026 年度</span>
+    </div>
+    <p class="manual-note">直接修改各卡片內的數字即可更新。</p>
+    <div class="stat-grid stat-grid-3">
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">新聞稿發布數</div>
+        <span class="stat-badge badge-manual">手動</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">媒體露出次數</div>
+        <span class="stat-badge badge-media">手動</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">影片製作件數</div>
+        <span class="stat-badge badge-manual">手動</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">攝影服務件數</div>
+        <span class="stat-badge badge-manual">手動</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">設計案件數</div>
+        <span class="stat-badge badge-manual">手動</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">0</div><!-- ← 更新此數字 -->
+        <div class="stat-label">活動場次</div>
+        <span class="stat-badge badge-manual">手動</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Google Analytics -->
+  <div class="group">
+    <div class="group-label">Google Analytics（網站流量）</div>
+    <div class="looker-wrap">
+      <iframe width="100%" height="700" src="https://lookerstudio.google.com/embed/reporting/2666e10b-da45-4f18-81c2-02f5b08afd7f/page/lHYyF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* 年度標籤自動更新 */
+document.getElementById('year-tag').textContent = new Date().getFullYear() + ' 年度';
+
+/* YouTube API */
+(function () {
+  const API_KEY    = 'AIzaSyCrGI_ZGqZJS0YPCW_C-7AGr4KMul6Z254';
+  const CHANNEL_ID = 'UC4cGxfjbE0dPnBOhHo0igTA';
+
+  function set(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('loading');
+    el.textContent = val;
+  }
+
+  fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`)
+    .then(r => r.json())
+    .then(data => {
+      const s = data.items?.[0]?.statistics;
+      if (!s) throw new Error();
+      set('yt-subs', parseInt(s.subscriberCount, 10).toLocaleString('zh-TW'));
+    })
+    .catch(() => set('yt-subs', '—'));
+})();
+
+/* Facebook 粉絲數 */
+(function () {
+  const PAGE_ID = '920818914631773';
+  const TOKEN   = 'EAAMVp5i8HGoBRVTzah9umpTLBuYkeHakZAZAGj0hGNMVHHxhmO5MshRgZBUr7wpvTZBF4r7TsAZA45Qcn8pk1OlVW4UjYbTaWgBVEoXDamavjQetaQhITZAYNFz3SMU8mEV3jiPnlZBpDss4lceFky4BNNymUgIQnN4qqMc1Dtf4B2EqzRrxmcgJJ6u0rEdzjU7zDwVCr2pZB0LrlHnZAIJyp';
+
+  function set(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('loading');
+    el.textContent = val;
+  }
+
+  fetch(`https://graph.facebook.com/v19.0/${PAGE_ID}?fields=followers_count&access_token=${TOKEN}`)
+    .then(r => r.json())
+    .then(data => {
+      if (!data.followers_count) throw new Error();
+      set('fb-fans', parseInt(data.followers_count).toLocaleString('zh-TW'));
+    })
+    .catch(() => set('fb-fans', '—'));
+})();
+</script>
+
+</body>
+</html>
