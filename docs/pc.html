@@ -355,46 +355,6 @@
       margin-top: 2px;
     }
 
-    /* 密碼 Modal */
-    .pwd-modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 100;
-      align-items: center; justify-content: center;
-    }
-    .pwd-modal-overlay.open { display: flex; }
-    .pwd-modal {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 28px 32px;
-      min-width: 280px;
-      text-align: center;
-      position: relative;
-    }
-    .pwd-modal h3 { font-size: 0.8rem; color: #4db6ac; margin-bottom: 16px; letter-spacing: 0.1em; }
-    /* 密碼頁放在院內網站，以 iframe 嵌入；院外連不到就不會顯示 */
-    .pwd-frame {
-      display: block;
-      width: min(480px, calc(100vw - 96px));
-      height: 240px;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      background: #fff;
-    }
-    .pwd-hint { font-size: 0.78rem; color: #8b949e; margin: 12px 0 16px; line-height: 1.6; }
-    .pwd-hint a { color: #4db6ac; text-decoration: underline; }
-    .pwd-close {
-      padding: 6px 20px;
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      color: #e6edf3;
-      font-size: 0.88rem;
-      cursor: pointer;
-    }
-    .pwd-close:hover { background: #30363d; }
 
     /* 頁尾 */
     footer {
@@ -461,10 +421,12 @@
           <span class="en-label">Retired</span>
         </a>
       </div>
+      <!-- 密碼頁放在院內網站（禁止被嵌入），直接開新分頁；院外連不到 -->
       <div style="margin-top:14px; text-align:right;">
-        <button class="photo-btn" onclick="showPassword()" style="cursor:pointer;">
+        <a class="photo-btn" href="https://hlm.tzuchi.com.tw/md/pc-pw.html" target="_blank" rel="noopener">
           🔑 查看密碼
-        </button>
+          <span class="en-label">僅限院內網路</span>
+        </a>
       </div>
     </div>
   </section>
@@ -579,37 +541,6 @@
 
 </div>
 
-<!-- 密碼 Modal -->
-<div class="pwd-modal-overlay" id="pwdModal">
-  <div class="pwd-modal">
-    <h3>人員照片下載密碼</h3>
-    <iframe id="pwdFrame" class="pwd-frame" title="人員照片下載密碼"></iframe>
-    <p class="pwd-hint">
-      僅限院內網路查看；若上方無法顯示，請改用<a href="https://hlm.tzuchi.com.tw/md/pc-pw.html" target="_blank" rel="noopener">新分頁開啟</a>，或洽公傳室。
-    </p>
-    <button class="pwd-close" onclick="closePassword()">關閉</button>
-  </div>
-</div>
-
-<script>
-  const PWD_URL = 'https://hlm.tzuchi.com.tw/md/pc-pw.html';
-
-  // 每次開啟都重新載入，密碼更新後能立即看到
-  function showPassword() {
-    document.getElementById('pwdFrame').src = PWD_URL;
-    document.getElementById('pwdModal').classList.add('open');
-  }
-
-  function closePassword() {
-    document.getElementById('pwdModal').classList.remove('open');
-    document.getElementById('pwdFrame').src = 'about:blank';
-  }
-
-  // 點遮罩關閉
-  document.getElementById('pwdModal').addEventListener('click', function(e) {
-    if (e.target === this) closePassword();
-  });
-</script>
 
 </body>
 </html>
